@@ -1,0 +1,82 @@
+[
+    {
+        "id": "security_acme",
+        "query": "What security concerns has Acme raised?",
+        "company_name": "Acme",
+        "expected_interaction_ids": [
+            "10000000-0000-0000-0000-000000000002"
+        ]
+    },
+    {
+        "id": "commercial_acme",
+        "query": "What commercial terms is Acme interested in?",
+        "company_name": "Acme",
+        "expected_interaction_ids": [
+            "10000000-0000-0000-0000-000000000005"
+        ]
+    },
+    {
+        "id": "integration_acme",
+        "query": "How does Acme want to connect its existing systems to the platform?",
+        "company_name": "Acme",
+        "expected_interaction_ids": [
+            "10000000-0000-0000-0000-000000000006"
+        ]
+    },
+    {
+        "id": "identity_acme",
+        "query": "What does Acme want to know about enterprise identity management?",
+        "company_name": "Acme",
+        "expected_interaction_ids": [
+            "10000000-0000-0000-0000-000000000004"
+        ]
+    },
+    {
+        "id": "data_residency_acme",
+        "query": "What data residency requirements has Acme discussed?",
+        "company_name": "Acme",
+        "expected_interaction_ids": [
+            "10000000-0000-0000-0000-000000000007"
+        ]
+    },
+    {
+        "id": "security_globex",
+        "query": "What security concerns has Globex raised?",
+        "company_name": "Globex",
+        "expected_interaction_ids": [
+            "20000000-0000-0000-0000-000000000002"
+        ]
+    },
+    {
+        "id": "efficiency_globex",
+        "query": "What business problem is Globex trying to solve?",
+        "company_name": "Globex",
+        "expected_interaction_ids": [
+            "ffffffff-ffff-ffff-ffff-ffffffffffff"
+        ]
+    },
+    {
+        "id": "analytics_globex",
+        "query": "What does Globex want to improve in terms of reporting?",
+        "company_name": "Globex",
+        "expected_interaction_ids": [
+            "20000000-0000-0000-0000-000000000003"
+        ]
+    },
+    {
+        "id": "api_initech",
+        "query": "What integration capabilities is Initech evaluating?",
+        "company_name": "Initech",
+        "expected_interaction_ids": [
+            "30000000-0000-0000-0000-000000000001"
+        ]
+    },
+    {
+        "id": "pricing_initech",
+        "query": "What pricing information did Initech request?",
+        "company_name": "Initech",
+        "expected_interaction_ids": [
+            "30000000-0000-0000-0000-000000000002"
+        ]
+    }
+]

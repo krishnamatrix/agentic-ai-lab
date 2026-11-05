@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic CRM Assistant | Chatbot & Memory Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <div class="logo-glow"></div>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">Agentic CRM Assistant</div>
+          <div class="brand-subtitle">Autonomous LLM Agent • Durable Memory • Vector Tools</div>
+        </div>
+      </div>
+
+      <div class="header-status">
+        <div class="status-pill">
+          <span class="status-dot pulsing"></span>
+          <span class="status-label">Model: <strong id="model-tag">gemma4:e4b</strong></span>
+        </div>
+        <div class="status-pill memory-stat">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a9 9 0 0 1 9 9c0 3.87-2.45 7.17-5.9 8.44L14 21a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2l-1.1-1.56A9 9 0 0 1 3 11a9 9 0 0 1 9-9z"/>
+          </svg>
+          <span>Memories: <strong id="header-mem-count">0</strong></span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div class="session-selector-wrap">
+          <span class="session-label">Session:</span>
+          <select id="session-select" class="session-select">
+            <option value="demo-001">demo-001 (Active)</option>
+            <option value="project-phoenix">project-phoenix</option>
+            <option value="acme-review">acme-review</option>
+          </select>
+          <button id="btn-new-session" class="btn-icon" title="Start New Session">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <button id="btn-reset-session" class="btn btn-secondary btn-sm" title="Clear memories and messages for this session">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Reset Session</span>
+        </button>
+
+        <button id="btn-toggle-inspector" class="btn btn-ghost btn-sm" title="Toggle Memory & Tool Inspector">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="9" y1="3" x2="9" y2="21"></line>
+          </svg>
+          <span id="inspector-btn-text">Inspector</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN BODY GRID -->
+    <main class="app-main">
+      <!-- CHAT CONVERSATION VIEW -->
+      <section class="chat-pane" id="chat-pane">
+        <!-- QUICK PROMPT PILLS BAR -->
+        <div class="prompt-chips-bar" id="prompt-chips-bar">
+          <div class="chips-category-label">Quick Queries:</div>
+          <div class="chips-scroll" id="chips-scroll">
+            <!-- Dynamic prompt chips will be injected here -->
+          </div>
+        </div>
+
+        <!-- MESSAGES CONTAINER -->
+        <div class="messages-container" id="messages-container">
+          <!-- WELCOME HERO STATE -->
+          <div class="welcome-card" id="welcome-card">
+            <div class="welcome-badge">
+              <span class="sparkle-icon">✦</span>
+              <span>CRM Agent Ready</span>
+            </div>
+            <h2>Meet your Agentic CRM Assistant</h2>
+            <p class="welcome-desc">
+              Ask questions about companies, executives, meetings, and technical discussions, or state preferences that the agent will store in its durable memory across turns.
+            </p>
+
+            <div class="feature-grid">
+              <div class="feature-card">
+                <div class="feature-icon icon-purple">🧠</div>
+                <h3>Durable Memory</h3>
+                <p>Extracts explicit user preferences, decisions, and constraints that persist across queries.</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon icon-cyan">⚡</div>
+                <h3>Context Compaction</h3>
+                <p>Summarizes older turns into high-density memory to keep conversations fast and focused.</p>
+              </div>
+              <div class="feature-card">
+                <div class="feature-icon icon-indigo">🔍</div>
+                <h3>CRM & Semantic RAG</h3>
+                <p>Executes SQL filters and vector embedding search across companies, people, and interactions.</p>
+              </div>
+            </div>
+
+            <div class="starter-prompts-section">
+              <div class="starter-header">Try these multi-turn test scenarios:</div>
+              <div class="starter-grid" id="starter-grid">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- MESSAGES STREAM -->
+          <div class="messages-stream" id="messages-stream"></div>
+
+          <!-- TYPING / AGENT THINKING INDICATOR -->
+          <div class="typing-indicator" id="typing-indicator" style="display: none;">
+            <div class="assistant-avatar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div class="typing-content">
+              <div class="typing-header">
+                <span class="typing-agent-name">Agent</span>
+                <span class="typing-activity" id="typing-activity">Thinking & querying CRM tools...</span>
+              </div>
+              <div class="bouncing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INPUT DOCK -->
+        <div class="input-dock">
+          <form id="chat-form" class="chat-form">
+            <div class="input-box-wrapper">
+              <textarea
+                id="message-input"
+                class="message-input"
+                placeholder="Message the agent... (e.g. 'Remember that I prefer Acme over Globex' or 'Who is Acme's CEO?')"
+                rows="1"
+                autofocus
+              ></textarea>
+              <div class="input-actions">
+                <button type="submit" id="btn-send" class="btn-send" title="Send message (Enter)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="input-footnote">
+              <span>Press <kbd>Enter</kbd> to send, <kbd>Shift</kbd> + <kbd>Enter</kbd> for new line</span>
+              <span class="active-session-indicator">Session: <strong id="input-session-tag">demo-001</strong></span>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- AGENT BRAIN & MEMORY INSPECTOR PANEL -->
+      <aside class="inspector-pane" id="inspector-pane">
+        <div class="inspector-header">
+          <div class="inspector-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a9 9 0 0 1 9 9c0 3.87-2.45 7.17-5.9 8.44L14 21a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2l-1.1-1.56A9 9 0 0 1 3 11a9 9 0 0 1 9-9z"/>
+            </svg>
+            <span>Agent Brain Inspector</span>
+          </div>
+          <button id="btn-close-inspector" class="btn-icon-sm" title="Close Panel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="inspector-scroll">
+          <!-- CARD 1A: USER-SCOPED MEMORIES -->
+          <div class="inspector-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🧠</span>
+                <span>User Memories</span>
+              </div>
+              <span class="count-badge" id="user-memories-count-badge">0 items</span>
+            </div>
+            <div class="card-desc">
+              Stable preferences, facts, and constraints extracted by <code>StructuredLLM</code> that persist <strong>across all conversations</strong>.
+            </div>
+            <div class="memory-items-list" id="user-memory-items-list">
+              <div class="empty-state-hint">No user memories yet. Share a lasting preference to populate this.</div>
+            </div>
+          </div>
+
+          <!-- CARD 1B: CONVERSATION-SCOPED MEMORIES -->
+          <div class="inspector-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">💬</span>
+                <span>Conversation Memories</span>
+              </div>
+              <span class="count-badge" id="conv-memories-count-badge">0 items</span>
+            </div>
+            <div class="card-desc">
+              Temporary decisions and context scoped to <strong>this session only</strong> (e.g. project names, per-discussion priorities).
+            </div>
+            <div class="memory-items-list" id="conv-memory-items-list">
+              <div class="empty-state-hint">No conversation memories yet. Try "For this discussion, call this Project Phoenix."</div>
+            </div>
+          </div>
+
+          <!-- CARD 2: MEMORY HISTORY AUDIT LOG -->
+          <div class="inspector-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">📋</span>
+                <span>Memory History</span>
+              </div>
+              <span class="count-badge" id="history-count-badge">0 events</span>
+            </div>
+            <div class="card-desc">
+              Chronological audit log of all memory <code>create</code>, <code>update</code>, and <code>delete</code> operations for this session.
+            </div>
+            <div class="memory-history-list" id="memory-history-list">
+              <div class="empty-state-hint">No memory operations yet. Interact with the agent to see history here.</div>
+            </div>
+          </div>
+
+          <!-- CARD 3: CONVERSATION SUMMARY COMPACTION -->
+          <div class="inspector-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">📜</span>
+                <span>Compacted Summary</span>
+              </div>
+              <span class="status-chip" id="summary-status-chip">Empty</span>
+            </div>
+            <div class="card-desc">
+              Maintained automatically when conversation turns exceed recent window to preserve LLM token context.
+            </div>
+            <div class="summary-box" id="summary-box">
+              <span class="empty-state-hint">No compaction needed yet. Appears after multiple conversation turns.</span>
+            </div>
+          </div>
+
+          <!-- CARD 3: ACTIVE AGENT TOOLS -->
+          <div class="inspector-card">
+            <div class="card-header">
+              <div class="card-title">
+                <span class="card-icon">🛠️</span>
+                <span>Connected Tools</span>
+              </div>
+              <span class="count-badge">4 active</span>
+            </div>
+            <div class="tools-list">
+              <div class="tool-item">
+                <div class="tool-name"><code>search_companies</code></div>
+                <div class="tool-desc">CRM company lookup by name & industry</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name"><code>search_people</code></div>
+                <div class="tool-desc">Search people, executives, and roles</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name"><code>search_interactions</code></div>
+                <div class="tool-desc">Structured meeting notes & email records</div>
+              </div>
+              <div class="tool-item">
+                <div class="tool-name"><code>search_knowledge</code></div>
+                <div class="tool-desc">Semantic pgvector embedding search</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/static/app.js?v=4"></script>
+</body>
+</html>
